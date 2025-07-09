@@ -49,29 +49,29 @@
 
 단축 URL 서비스는 다음의 3가지 기능으로 구성된다. 각 기능에 맞는 RESTful API 경로는 다음과 같이 설계하였다.
 
-
+---
 
 ### 1. 단축 URL 생성 API
 
 - **Method**: POST  
-- **Endpoint**: `/api/short-urls`  
+- **Endpoint**: `/shortenUrl`  
 - **설명**: 원본 URL을 입력받아 단축 URL을 생성하는 API이다.
 
 #### 설계 고민
-처음엔 다음과 같이 간단히 GET 요청에 원본 URL을 쿼리파라미터로 넘기는 방식도 고려했다.
+처음에는 다음과 같은 방식도 고려하였다:
 
 ```
 
-GET /api/short-urls?originalUrl=[https://www.example.com/page](https://www.example.com/page)
+GET /shortenUrl?originalUrl=[https://www.example.com/page](https://www.example.com/page)
 
 ````
 
-하지만 이 방식은 몇 가지 문제점이 있다.
-- **URL 인코딩 이슈**: 긴 원본 URL이 포함될 경우, query string의 길이 제한에 걸릴 수 있다.
-- **URL 노출**: 브라우저 캐시나 로그 등에서 민감한 URL 정보가 쉽게 노출될 수 있다.
-- **REST 원칙 위배**: 새로운 리소스를 생성하는 작업은 `POST`가 적절하다. `GET`은 부작용 없는 조회에 사용해야 한다.
+하지만 이 방식은 다음과 같은 문제점이 있다.
+- **URL 인코딩 이슈**: 원본 URL이 길거나 복잡할 경우, 브라우저나 서버에서 쿼리 문자열 길이 제한에 걸릴 수 있다.
+- **URL 노출 위험**: 로그, 히스토리, 브라우저 주소창 등을 통해 민감한 URL 정보가 쉽게 드러날 수 있다.
+- **REST 원칙 위배**: `GET`은 안전하고 멱등한 방식으로 조회 용도에 적합하며, 새로운 리소스 생성을 위해서는 `POST`가 더 적절하다.
 
-이러한 이유로, 원본 URL은 본문(body)에 담고, `POST` 방식으로 처리하는 방식을 선택했다.
+이러한 이유로 `POST /shortenUrl` 방식과, 본문(body)에 데이터를 담는 구조로 설계하였다.
 
 **요청 예시**
 ```json
@@ -84,7 +84,7 @@ GET /api/short-urls?originalUrl=[https://www.example.com/page](https://www.examp
 
 ```json
 {
-  "shortUrl": "http://localhost:8080/s/AbCdEfGh"
+  "shortUrl": "http://localhost:8080/AbCdEfGh"
 }
 ```
 
@@ -93,21 +93,27 @@ GET /api/short-urls?originalUrl=[https://www.example.com/page](https://www.examp
 ### 2. 단축 URL 리다이렉트 API
 
 * **Method**: GET
-* **Endpoint**: `/s/{shortKey}`
+* **Endpoint**: `/{shortenUrlKey}`
 * **설명**: 단축된 URL로 요청이 들어오면, 해당 키에 해당하는 원본 URL로 리다이렉트 시키는 API이다.
-* **예시 요청**: `/s/AbCdEfGh`
-  (서버는 원본 URL로 `302 Redirect` 응답)
+
+**예시 요청**
+
+```
+GET /AbCdEfGh
+```
+
+> 서버는 302 Redirect 응답으로 원본 URL로 이동시킨다.
 
 #### 설계 고민
 
-실제 서비스에서 사용자들이 이 경로를 직접 브라우저에 입력하거나 공유하게 될 가능성이 높다. 따라서 API 경로는 짧고 단순하게 유지하고자 `/s/`로 명시했다. `short-urls/{key}` 같은 방식도 고려했지만, 사용자에게 보여질 최종 URL이므로 가독성과 간결함이 더 중요하다고 판단했다.
+단축 URL은 최종 사용자에게 노출되는 경로이므로 `/s/`나 `/shortenUrl/`과 같은 접두어 없이, 단순히 `/AbCdEfGh`와 같은 짧은 형식을 사용하는 것이 직관적이고 공유하기도 좋다.
 
 ---
 
 ### 3. 단축 URL 정보 조회 API
 
 * **Method**: GET
-* **Endpoint**: `/api/short-urls/{shortKey}`
+* **Endpoint**: `/shortenUrl/{shortenUrlKey}`
 * **설명**: 단축 URL에 대한 상세 정보(원본 URL, 리다이렉트 횟수 등)를 조회하는 API이다.
 
 **응답 예시**
@@ -122,6 +128,8 @@ GET /api/short-urls?originalUrl=[https://www.example.com/page](https://www.examp
 
 #### 설계 고민
 
-해당 API는 서비스 내부 관리자 혹은 사용자 계정이 연동된 경우, 통계 데이터를 확인하기 위한 용도다. RESTful하게 리소스 단위로 관리하고자 `/api/short-urls/{shortKey}` 형태로 구성했다. 데이터 조회는 부작용이 없으므로 `GET`이 적절하다.
+해당 API는 생성된 단축 URL의 사용 통계를 확인하거나 추적하는 용도로 사용된다.
+따라서 특정 리소스를 식별하는 형태인 `/shortenUrl/{shortenUrlKey}` 경로로 명확하게 표현했다.
+데이터 조회이므로 `GET` 메서드가 적절하다.
 
 </details>
