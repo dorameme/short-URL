@@ -1,6 +1,7 @@
 # shorten-url-service
 단축 URL 서비스 레포지토리
 
+
 ### 요구사항
 1. [bitly](https://bitly.com/) 같은 단축 URL 서비스를 만들어야 합니다.
 2. 단축된 URL의 키(Key)는 8글자로 생성되어야 합니다. '단축된 URL의 키'는 'https://bit.ly/3onGWgK' 에서 경로(Path)에 해당하는 '3onGWgK'를 의미합니다. bitly에서는 7글자의 키를 사용합니다.
@@ -16,3 +17,18 @@
 1. 단축 URL 생성 API
 2. 단축 URL 리다이렉트 API
 3. 단축 URL 정보 조회 API
+
+<details>
+<summary>️ Spring Initializer 프로젝트 설정과 이유</summary>
+
+- **Spring Boot 3.x 기반 선택**  
+- Spring Boot 2는 곧 End of Life이 예정되어 있어, 장기적으로 유지보수가 불리하다.
+- 스프링 생태계도 Spring Boot 3 중심으로 이동 중이므로, 학습 및 적용에 유리.
+- **Java 17 사용**  
+  Java 17은 Long Term Support 버전으로, 안정성과 장기적인 유지보수가 보장된다.
+- Spring Boot 3.x는 Java 17 이상을 요구하므로 호환성 측면에서 필수이기도함.
+
+- **Gradle 사용**  
+- Gradle은 빌드 속도가 빠르고, 의존성 관리가 유연하며, 설정이 간결
+- 최근 Spring 진영과 다양한 오픈소스 프로젝트에서도 **Gradle 사용 비율이 증가**하고 있어서 추세에 부합함
+</details>
