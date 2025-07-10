@@ -1,10 +1,15 @@
+아래는 요청하신 리드미 형식에 기존 내용과 함께 토글로 이어 붙인 완성본입니다.
+
+---
+
 # shorten-url-service
+
 단축 URL 서비스 레포지토리
 
-
 ### 요구사항
+
 1. [bitly](https://bitly.com/) 같은 단축 URL 서비스를 만들어야 합니다.
-2. 단축된 URL의 키(Key)는 8글자로 생성되어야 합니다. '단축된 URL의 키'는 'https://bit.ly/3onGWgK' 에서 경로(Path)에 해당하는 '3onGWgK'를 의미합니다. bitly에서는 7글자의 키를 사용합니다.
+2. 단축된 URL의 키(Key)는 8글자로 생성되어야 합니다. '단축된 URL의 키'는 '[https://bit.ly/3onGWgK](https://bit.ly/3onGWgK)' 에서 경로(Path)에 해당하는 '3onGWgK'를 의미합니다. bitly에서는 7글자의 키를 사용합니다.
 3. 키 생성 알고리즘은 자유롭게 구현하시면 됩니다.
 4. 단축된 URL로 사용자가 요청하면 원래의 URL로 리다이렉트(Redirect)되어야 합니다.
 5. 원래의 URL로 다시 단축 URL을 생성해도 항상 새로운 단축 URL이 생성되어야 합니다. 이때 기존에 생성되었던 단축 URL도 여전히 동작해야 합니다.
@@ -14,38 +19,46 @@
 9. (선택) 해당 서비스를 사용할 수 있는 UI 페이지를 구현해주세요.
 
 ### 필요 API
+
 1. 단축 URL 생성 API
 2. 단축 URL 리다이렉트 API
 3. 단축 URL 정보 조회 API
 
-<details>
-<summary>️ Spring Initializer 프로젝트 설정과 이유</summary>
+<details>  
+<summary>️ Spring Initializer 프로젝트 설정과 이유</summary>  
 
-- **Spring Boot 3.x 기반 선택**  
-- Spring Boot 2는 곧 End of Life이 예정되어 있어, 장기적으로 유지보수가 불리하다.
-- 스프링 생태계도 Spring Boot 3 중심으로 이동 중이므로, 학습 및 적용에 유리.
-- **Java 17 사용**  
+* **Spring Boot 3.x 기반 선택**
+
+* Spring Boot 2는 곧 End of Life이 예정되어 있어, 장기적으로 유지보수가 불리하다.
+
+* 스프링 생태계도 Spring Boot 3 중심으로 이동 중이므로, 학습 및 적용에 유리.
+
+* **Java 17 사용**
   Java 17은 Long Term Support 버전으로, 안정성과 장기적인 유지보수가 보장된다.
-- Spring Boot 3.x는 Java 17 이상을 요구하므로 호환성 측면에서 필수이기도함.
 
-- **Gradle 사용**  
-- Gradle은 빌드 속도가 빠르고, 의존성 관리가 유연하며, 설정이 간결
-- 최근 Spring 진영과 다양한 오픈소스 프로젝트에서도 **Gradle 사용 비율이 증가**하고 있어서 추세에 부합함
-</details>
+* Spring Boot 3.x는 Java 17 이상을 요구하므로 호환성 측면에서 필수이기도함.
 
-<details>
-<summary>URL 경로의 네이밍 </summary>
+* **Gradle 사용**
+
+* Gradle은 빌드 속도가 빠르고, 의존성 관리가 유연하며, 설정이 간결
+
+* 최근 Spring 진영과 다양한 오픈소스 프로젝트에서도 **Gradle 사용 비율이 증가**하고 있어서 추세에 부합함
+
+</details>  
+
+<details>  
+<summary>URL 경로의 네이밍</summary>  
 
 대표적으로 카멜케이스 , Spinal 케이스, 스네이크 케이스 등이 있는데
-- 카멜케이스 - 일관성 있지만, 알파벳 외엔 띄어쓰기가 어렵다
-- spinal케이스 - 일반적으로 가장 권장되는 방식이다. 나는 학습을 위해 이 케이스를 선택!
-- 스네이크케이스 - URL에서 제일 권장되지않는 형식이다. 가끔 언더바를 띄어쓰기가아닌 하나의 단어로 판단하는 경우가 있음.
-</details>
 
+* 카멜케이스 - 일관성 있지만, 알파벳 외엔 띄어쓰기가 어렵다
+* spinal케이스 - 일반적으로 가장 권장되는 방식이다. 나는 학습을 위해 이 케이스를 선택!
+* 스네이크케이스 - URL에서 제일 권장되지않는 형식이다. 가끔 언더바를 띄어쓰기가아닌 하나의 단어로 판단하는 경우가 있음.
 
+</details>  
 
-<details>
-<summary>URL 만들기</summary>
+<details>  
+<summary>URL 만들기</summary>  
 
 단축 URL 서비스는 다음의 3가지 기능으로 구성된다. 각 기능에 맞는 RESTful API 경로는 다음과 같이 설계하였다.
 
@@ -53,39 +66,40 @@
 
 ### 1. 단축 URL 생성 API
 
-- **Method**: POST  
-- **Endpoint**: `/shortenUrl`  
-- **설명**: 원본 URL을 입력받아 단축 URL을 생성하는 API이다.
+* **Method**: POST
+* **Endpoint**: `/shortenUrl`
+* **설명**: 원본 URL을 입력받아 단축 URL을 생성하는 API이다.
 
 #### 설계 고민
+
 처음에는 다음과 같은 방식도 고려하였다:
 
 ```
-
-GET /shortenUrl?originalUrl=[https://www.example.com/page](https://www.example.com/page)
-
-````
+GET /shortenUrl?originalUrl=https://www.example.com/page  
+```
 
 하지만 이 방식은 다음과 같은 문제점이 있다.
-- **URL 인코딩 이슈**: 원본 URL이 길거나 복잡할 경우, 브라우저나 서버에서 쿼리 문자열 길이 제한에 걸릴 수 있다.
-- **URL 노출 위험**: 로그, 히스토리, 브라우저 주소창 등을 통해 민감한 URL 정보가 쉽게 드러날 수 있다.
-- **REST 원칙 위배**: `GET`은 안전하고 멱등한 방식으로 조회 용도에 적합하며, 새로운 리소스 생성을 위해서는 `POST`가 더 적절하다.
+
+* **URL 인코딩 이슈**: 원본 URL이 길거나 복잡할 경우, 브라우저나 서버에서 쿼리 문자열 길이 제한에 걸릴 수 있다.
+* **URL 노출 위험**: 로그, 히스토리, 브라우저 주소창 등을 통해 민감한 URL 정보가 쉽게 드러날 수 있다.
+* **REST 원칙 위배**: `GET`은 안전하고 멱등한 방식으로 조회 용도에 적합하며, 새로운 리소스 생성을 위해서는 `POST`가 더 적절하다.
 
 이러한 이유로 `POST /shortenUrl` 방식과, 본문(body)에 데이터를 담는 구조로 설계하였다.
 
 **요청 예시**
+
 ```json
-{
-  "originalUrl": "https://www.example.com/page"
-}
-````
+{  
+  "originalUrl": "https://www.example.com/page"  
+}  
+```
 
 **응답 예시**
 
 ```json
-{
-  "shortUrl": "http://localhost:8080/AbCdEfGh"
-}
+{  
+  "shortUrl": "http://localhost:8080/AbCdEfGh"  
+}  
 ```
 
 ---
@@ -99,7 +113,7 @@ GET /shortenUrl?originalUrl=[https://www.example.com/page](https://www.example.c
 **예시 요청**
 
 ```
-GET /AbCdEfGh
+GET /AbCdEfGh  
 ```
 
 > 서버는 302 Redirect 응답으로 원본 URL로 이동시킨다.
@@ -119,11 +133,11 @@ GET /AbCdEfGh
 **응답 예시**
 
 ```json
-{
-  "originalUrl": "https://www.example.com/page",
-  "redirectCount": 12,
-  "createdAt": "2025-07-09T13:00:00"
-}
+{  
+  "originalUrl": "https://www.example.com/page",  
+  "redirectCount": 12,  
+  "createdAt": "2025-07-09T13:00:00"  
+}  
 ```
 
 #### 설계 고민
@@ -131,5 +145,68 @@ GET /AbCdEfGh
 해당 API는 생성된 단축 URL의 사용 통계를 확인하거나 추적하는 용도로 사용된다.
 따라서 특정 리소스를 식별하는 형태인 `/shortenUrl/{shortenUrlKey}` 경로로 명확하게 표현했다.
 데이터 조회이므로 `GET` 메서드가 적절하다.
+
+</details>  
+
+<details>  
+<summary>단축 URL에서 허용하는 URL 타입</summary>  
+
+* 단축 URL 서비스에서는 원본 URL이 반드시 `http://` 또는 `https://`로 시작해야 한다.
+* 그 이유는 다음과 같다:
+
+  1. **보안 및 명확성**: `http`/`https` 스킴이 없는 URL은 브라우저가 해석할 때 상대경로로 처리되거나, 비정상적인 동작을 할 수 있다.
+  2. **리다이렉션 신뢰성**: 서버가 리다이렉트 시 명확한 프로토콜이 없는 URL은 정확한 원본 위치를 알 수 없다.
+  3. **사용자 입력 오류 방지**: 프로토콜 없이 URL을 받으면 의도하지 않은 잘못된 주소로 연결될 가능성이 크다.
+  4. **규칙 명확화**: 서비스 정책으로 명확히 제한하면 내부 로직 처리와 보안 검증이 쉬워진다.
+
+</details>  
+
+
+<details>  
+<summary>나의 프로젝트 구조에서 DTO는 왜 Presentation 계층에 속하는가?</summary>  
+
+  1. **DTO는 외부 요청/응답에 맞춘 데이터 형식이다**
+
+    * 클라이언트(웹, 앱 등)와 통신하기 위한 데이터 전달용 객체로, 도메인의 핵심 비즈니스 모델과는 별도로 설계된다.
+  2. **도메인과는 역할 분리가 명확해야 한다**
+
+    * 도메인은 비즈니스 규칙과 상태를 관리하며, 내부 로직에 집중한다.
+    * DTO가 도메인에 포함되면 도메인의 독립성이 훼손되고, 외부 변경에 도메인이 직접 영향을 받는다.
+
+</details>
+
+
+<details>  
+<summary>도메인이 아닌 DTO에서 검증을 하는 이유</summary>  
+
+* DTO에서 요청 데이터를 받는 즉시 검증하는 이유는 다음과 같다:
+
+  1. **입력 값의 기본 유효성 검사 수행**
+
+    * 클라이언트가 보낸 데이터가 애초에 형식과 조건에 맞는지 빠르게 체크 가능
+  2. **비즈니스 로직 실행 전 오류를 조기에 발견하여 비용 절감**
+
+    * 도메인 계층까지 불필요한 로직 실행 없이 방어 가능
+  3. **스프링 Validation 프레임워크와의 자연스러운 연동**
+
+    * `@Valid` 애노테이션을 통한 자동 검증 지원
+
+* 도메인에서 검증하지 않는 이유는
+
+  * 도메인은 핵심 비즈니스 규칙에 집중하며, 외부 요청의 입력 형식 검증은 주로 `presentation` 계층에서 다루는 것이 역할 분리에 적합하다.
+  * 도메인 내에 중복 검증 로직이 들어가면 코드가 복잡해지고 테스트도 어려워짐.
+
+</details>  
+
+<details> <summary>인프라스트럭처 계층은 다른 계층에 의존하면 안 된다?</summary>
+
+
+인프라스트럭처 계층은 외부 시스템과의 통신(예: DB, 메시징, 파일시스템 등)을 담당하는 최하위 계층이다.
+
+이 계층은 도메인, 애플리케이션, 래포지토리 같은 상위 계층에 의존하면 안 된다.
+
+의존성 방향은 내부(도메인 등) → 외부(인프라스트럭처)이어야 한다.
+즉, 인프라스트럭처는 독립적이어야 하며, 절대 상위 계층에 의존하지 않는다.
+이렇게 하면 비즈니스 로직은 외부 기술 변화에 영향을 받지 않고 안정적으로 유지할 수 있다.
 
 </details>
