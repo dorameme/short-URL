@@ -7,6 +7,24 @@ public class ShortenURL {
     private String shortenURLKey;
     private Long redirectCount;
 
+    public ShortenURL(String originalURL, String shortenURLKey) {
+        this.originalURL = originalURL;
+        this.shortenURLKey = shortenURLKey;
+        this.redirectCount = 0L;
+    }
+
+    public String getOriginalURL() {
+        return originalURL;
+    }
+
+    public String getShortenURLKey() {
+        return shortenURLKey;
+    }
+
+    public Long getRedirectCount() {
+        return redirectCount;
+    }
+
     public static String generateShortenUrlKey() {//왜 암호화를 도메인에 넣어야하는지? //왜 base56을 쓰는지?
         String base56Characters = "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz";
         Random random = new Random();
@@ -18,5 +36,9 @@ public class ShortenURL {
             shortenUrlKey.append(base56Character);
         }
         return shortenUrlKey.toString();
+    }
+
+    public void increaseRedirectCount() {
+        this.redirectCount++;
     }
 }
