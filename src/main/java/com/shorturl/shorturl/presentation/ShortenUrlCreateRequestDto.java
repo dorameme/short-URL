@@ -9,6 +9,13 @@ public class ShortenUrlCreateRequestDto {
     @URL(regexp = "^(https?)://.*$", message = "URL은 http:// 또는 https:// 로 시작해야 합니다.")
     private String originalUrl;
 
+    public ShortenUrlCreateRequestDto() {
+    }
+
+    public ShortenUrlCreateRequestDto(String originalUrl) {
+        this.originalUrl = originalUrl;
+    }
+
     public String getOriginalUrl() {
         return originalUrl;
     }
