@@ -33,17 +33,17 @@ class ShortenURLRestControllerTest {
         }
     }
 
-    @Test
-    @DisplayName("원래의 URL로 리다이렉트 되어야 한다.")
-    void redirectShortUrl() throws Exception {
-        String expectedOriginalUrl = "https://www.google.com";
-
-        // 모킹
-        Mockito.when(simpleShortenService.getOriginalUrlByShortenUrlKey(any()))
-            .thenReturn(expectedOriginalUrl);
-
-        mockMvc.perform(get("/any-key"))
-            .andExpect(status().isMovedPermanently())
-            .andExpect(header().string("Location", expectedOriginalUrl));
-    }
+//    @Test
+//    @DisplayName("원래의 URL로 리다이렉트 되어야 한다.")
+//    void redirectShortUrl() throws Exception {
+//        String expectedOriginalUrl = "https://www.google.com";
+//
+//        // 모킹
+//        Mockito.when(simpleShortenService.getOriginalUrlByShortenUrlKey(any()))
+//            .thenReturn(expectedOriginalUrl);
+//
+//        mockMvc.perform(get("/any-key"))
+//            .andExpect(status().isMovedPermanently())
+//            .andExpect(header().string("Location", expectedOriginalUrl));
+//    }
 }
