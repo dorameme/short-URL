@@ -26,7 +26,7 @@ dependencies {
 	// H2는 개발용, 삭제하거나 그대로 둬도 됨
 	runtimeOnly 'com.h2database:h2'
 
-	// Postgres 드라이버 추가 
+	// Postgres 드라이버 추가 ``
 	runtimeOnly 'org.postgresql:postgresql:42.7.3'
 
 	annotationProcessor 'org.projectlombok:lombok'
