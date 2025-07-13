@@ -22,7 +22,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
+
+	// H2는 개발용, 삭제하거나 그대로 둬도 됨
 	runtimeOnly 'com.h2database:h2'
+
+	// Postgres 드라이버 추가 
+	runtimeOnly 'org.postgresql:postgresql:42.7.3'
+
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
