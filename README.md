@@ -1,11 +1,8 @@
-아래는 요청하신 리드미 형식에 기존 내용과 함께 토글로 이어 붙인 완성본입니다.
 
----
+# 단축 URL 서비스 레포지토리
+<img width="455" height="306" alt="image" src="https://github.com/user-attachments/assets/5c877240-0b7a-4e6e-8b02-4355cf12d785" />
 
-# shorten-url-service
-
-단축 URL 서비스 레포지토리
-
+배포 : https://short-url2.onrender.com/
 ### 요구사항
 
 1. [bitly](https://bitly.com/) 같은 단축 URL 서비스를 만들어야 합니다.
