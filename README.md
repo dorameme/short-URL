@@ -106,6 +106,11 @@ GET /shortenUrl?originalUrl=https://www.example.com/page
 
 ### 2. 단축 URL 리다이렉트 API
 
+> **스프링 MVC의 경로 매핑은 가장 구체적인 경로부터 평가하지만, `/{shortenUrlKey}`는 `/` 바로 아래 모든 경로를 포괄하여 매칭한다.**  
+>  
+> **이로 인해 프로젝트에서 경로 충돌이 발생하여, 리다이렉트 엔드포인트를 `/r/{shortenUrlKey}` 로 수정하여 충돌을 방지하였다.**
+
+
 * **Method**: GET
 * **Endpoint**: `/{shortenUrlKey}`
 * **설명**: 단축된 URL로 요청이 들어오면, 해당 키에 해당하는 원본 URL로 리다이렉트 시키는 API이다.
