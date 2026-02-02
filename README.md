@@ -2,7 +2,7 @@
 # 단축 URL 서비스 레포지토리
 <img width="455" height="306" alt="image" src="https://github.com/user-attachments/assets/5c877240-0b7a-4e6e-8b02-4355cf12d785" />
 
-배포 : https://short-url2.onrender.com/
+배포 : https://short-url2.onrender.com/ - 배포중지 2025.12.12
 ### 요구사항
 
 1. [bitly](https://bitly.com/) 같은 단축 URL 서비스를 만들어야 합니다.
